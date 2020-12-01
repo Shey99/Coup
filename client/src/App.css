@@ -1,0 +1,45 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100&family=Roboto:wght@300&display=swap');
+/* Global Styles */
+:root {
+  --primary-color: #003699;
+  --dark-color: #333333;
+  --light-color: #f4f4f4;
+  --danger-color: #dc3545;
+  --success-color: #28a745;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+  font-size: 1rem;
+  line-height: 1.6;
+  background-color: #3d2323;
+  color: #f0f0f0;
+}
+
+a {
+  text-decoration: none;
+}
+
+.MuiFormControl-root.MuiTextField-root {
+  margin-right: 16px;
+  font-size: 24px;
+}
+
+#standard-basic, #standard-basic-label {
+  color: white;
+}
+
+.MuiInput-root.MuiInput-underline:before{
+  border-bottom-color: white;
+}
+
+.MuiInput-root.MuiInput-underline:after {
+  border-bottom-color: white;
+}
+
