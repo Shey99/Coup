@@ -2,29 +2,37 @@ const app = require('express')();
 const http = require('http').createServer(app);
 const io = require('socket.io')(http, {
   cors: {
-    origin: 'http://localhost:5000',
+    origin: '/',
     credentials: true,
   },
 });
 
+var players = [];
+
 // Run when client connects
 io.on('connection', (socket) => {
-  console.log('new web socket connection...');
+  const currentLobby = socket.request._query.lobby;
+  console.log(`Joined ${currentLobby}`);
 
-  socket.emit('message', 'Welcome to Coup!');
+  // Join lobby
+  socket.join(currentLobby);
 
-  // Broadcast when a user connects
-  socket.broadcast.emit('message', 'A user has joined the chat');
+  // add new player
+  socket.on('newPlayer', (newPlayer) => {
+    players.push(newPlayer);
+    io.to(currentLobby).emit('loadPlayers', players);
+  });
 
   // Runs when client disconnects
   socket.on('disconnect', () => {
-    io.emit('message', 'A user has left the chat');
+    players.pop();
+    io.to(currentLobby).emit('loadPlayers', players);
+    console.log('Socket disconnnected');
   });
+});
 
-  // Listen for room 1 connections
-  socket.on('room', (num) => {
-    console.log(`A user has joined room ${num}`);
-  });
+app.get('lobby', (req, res) => {
+  console.log('lobby connected');
 });
 
 const PORT = process.env.PORT || 5000;

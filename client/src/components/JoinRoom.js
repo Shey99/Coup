@@ -7,19 +7,17 @@ const JoinRoom = () => {
   return (
     <div>
       <Link to='/'>
-        <Button
-          color='primary'
-          style={{ 'fontSize': '30px', color: blue[300] }}
-        >
+        <Button color='primary' style={{ fontSize: '30px', color: blue[300] }}>
           Back
         </Button>
       </Link>
-      <Grid
-        container
-        justify='center'
-        alignItems='center'
-      >
-        <h1>Join A Room</h1>
+      <Grid container direction='column' justify='center' alignItems='center'>
+        <h1>Join A Room</h1>{' '}
+        <Link to='/lobby'>
+          <Button variant='contained' color='primary' size='large'>
+            The lobby
+          </Button>
+        </Link>
       </Grid>
     </div>
   );
