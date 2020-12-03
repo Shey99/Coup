@@ -12,27 +12,42 @@ var players = [];
 // Run when client connects
 io.on('connection', (socket) => {
   const currentLobby = socket.request._query.lobby;
-  console.log(`Joined ${currentLobby}`);
 
   // Join lobby
   socket.join(currentLobby);
 
-  // add new player
+  const currentRoom = io.sockets.adapter.rooms.get(currentLobby);
+
+  const loadPlayers = () => {
+    let playerNames = [];
+    for (entry of players) {
+      playerNames.push(entry.name);
+    }
+    return playerNames;
+  };
+
+  const deleteDisconnectedPlayer = () => {
+    for (let i = 0; i < players.length; i++) {
+      if (!currentRoom.has(players[i].id)) {
+        console.log(`${players[i].name} has left ${currentLobby}`);
+        players.splice(i, 1);
+      }
+    }
+  };
+
+  // Add new player
   socket.on('newPlayer', (newPlayer) => {
-    players.push(newPlayer);
-    io.to(currentLobby).emit('loadPlayers', players);
+    players.push({ name: newPlayer, id: socket.id });
+    io.to(currentLobby).emit('loadPlayers', loadPlayers());
+    console.log(`${newPlayer} joined ${currentLobby}`);
   });
 
   // Runs when client disconnects
   socket.on('disconnect', () => {
-    players.pop();
-    io.to(currentLobby).emit('loadPlayers', players);
+    deleteDisconnectedPlayer();
+    io.to(currentLobby).emit('loadPlayers', loadPlayers());
     console.log('Socket disconnnected');
   });
-});
-
-app.get('lobby', (req, res) => {
-  console.log('lobby connected');
 });
 
 const PORT = process.env.PORT || 5000;

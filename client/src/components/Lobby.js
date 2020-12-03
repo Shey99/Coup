@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { io } from 'socket.io-client';
 import { Link } from 'react-router-dom';
 import { Button } from '@material-ui/core';
@@ -6,12 +6,8 @@ import blue from '@material-ui/core/colors/blue';
 
 let socket;
 
-const Lobby = () => {
+const Lobby = ({playerName}) => {
   const [players, setPlayers] = useState([]);
-
-  // random names
-  const names = ['sam', 'anthony', 'melissa', 'ashley', 'robert', 'jake'];
-  const playerName = names[Math.floor(Math.random() * 5)];
 
   const newPlayer = () => {
     const playerList = [...players, playerName];
